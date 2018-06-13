@@ -1,0 +1,365 @@
+<!doctype html>
+<html>
+   <head>
+      <meta charset="utf-8"/>
+      <title>实时天气</title>
+	  <style>
+	    *{
+            font-family:"Microsoft Yahei";
+            margin:0px;
+            padding:0px;
+        }
+        #allmap {width:800px;height:800px;overflow: hidden;margin:50px;font-family:"微软雅黑";}
+        #box1{
+            width:780px;
+            height:780px;
+            padding:10px;
+            top:50px;
+            right:100px;
+            position: absolute;
+          
+        }
+        #box2{
+            width:780px;
+            height:480px;
+            margin-bottom:20px;
+            text-align: center;
+        }
+        #box3{
+            width:780px;
+            height:280px;
+            text-align: center;
+        }
+        #box31,#box34{
+            float: left;
+            width:185px;
+            height:280px;
+        }
+        #box32,#box33{
+            float: left;
+            width:185px;
+            height:280px;
+            margin:0px 10px;
+        }
+        #p1{
+            color: black;
+            font-size: 30px;
+        }
+        label{
+        top:30px;
+        left:20px;
+        position: absolute;
+        color: blue;
+        font-weight:bold;
+        z-index:1;
+        }
+      </style>
+
+      <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=I44PO60tiG0WnvTbg3dxV9IazeF44Tu4"></script>
+      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+      <!--引用JQuery文件-->
+       <script>
+          window.onload=function(){
+            //用该方法获取json文件地址，来解析json文件。
+
+            //创建预加载函数
+            function yjz(a){
+                $.get(a,function(data1){
+               var dt=data1.data;
+               // var box2=document.getElementById("box2");
+               // box2.src=dt[0].url;
+               //alert(dt.yesterday.type);
+
+                //获取天气类型
+                var type1=dt.forecast;
+                //alert(type1[0]);
+                var op=box2.style.opacity="0.5";
+                var op1=box3.style.opacity="0.3";
+                switch(type1[0].type)
+                {
+                    case "多云":box2.style.background="url(img/26.jpg)"; op; break;
+                    case "阴":box2.style.background="url(img/27.jpg)";   op; break;
+                    case "晴":box2.style.background="url(img/25.jpg)";   op; break;
+                    case "小雨":box2.style.background="url(img/28.jpg)"; op; break;
+                    case "中雨":box2.style.background="url(img/28.jpg)"; op; break;
+
+                    /*
+                    //预加载天气的图片判断 
+                    case "雪":box2.style.background="url(../img/28.jpg)"; op; break;
+                    case "雷阵雨":box2.style.background="url(../img/28.jpg)"; op; break;
+                    case "中雨":box2.style.background="url(../img/28.jpg)"; op; break;
+                    case "中雨":box2.style.background="url(../img/28.jpg)"; op; break;
+                    case "中雨":box2.style.background="url(../img/28.jpg)"; op; break;
+                    case "中雨":box2.style.background="url(../img/28.jpg)"; op; break;
+                    */
+                  
+                    default:box2.style.background="url(img/1.jpg)";     op;
+                }
+
+                //获取城市名称
+                p1.innerHTML=dt.city;
+
+                //获取当日温度
+                p2.innerHTML=dt.wendu;
+
+                //获取当日天气类型
+                sp.innerHTML=type1[0].type;
+
+                //获取当日日期、温度差、风向、aqi
+                p3.innerHTML=type1[0].date+"   "+type1[0].high+"   "+type1[0].low+"  "+"风向:"+type1[0].fengxiang+"  "+"PM2.5:"+dt.aqi;
+
+
+                //获取当日感冒参数
+                p4.innerHTML=dt.ganmao;
+
+
+             
+             /*
+             //获取二日日期
+                p5.innerHTML=type1[1].date;
+
+                //获取二日图片
+
+
+                //获取二日温度差
+                p6.innerHTML=type1[1].high+"   "+type1[1].low;
+
+                //获取二日天气类型
+                p7.innerHTML=type1[1].type;
+
+                switch(p7.innerHTML)
+                {
+                    case "多云":img1.src="../img/40.jpg"; op1; break;
+                    case "阴":img1.src="../img/26.jpg"; op1; break;
+                    case "晴":img1.src="../img/26.jpg"; op1; break;
+                    case "小雨":img1.src="../img/26.jpg"; op1; break;
+                    case "中雨":img1.src="../img/26.jpg"; op1; break;
+                    default:img1.src="../img/28.jpg";  op1;
+                }
+
+             */
+
+
+                
+                //获取每日天气数据的函数
+                function tq(a,b,c,d,e){
+                a.innerHTML=type1[e].date;
+                b.innerHTML=type1[e].high+"   "+type1[e].low;
+                c.innerHTML=type1[e].type;
+                switch(c.innerHTML)
+                {
+                case "多云":d.src="img/42.jpg"; op1; break;
+                case "阴":d.src="img/43.jpg"; op1; break;
+                case "晴":d.src="img/41.jpg"; op1; break;
+                case "小雨":d.src="img/44.jpg"; op1; break;
+                case "中雨":d.src="img/44.jpg"; op1; break;
+                default:d.src="img/11.jpg";  op1;
+                 }
+                }
+
+            //分别获取二、三、四日的天气数据
+            tq(p5,p6,p7,img1,1);
+            tq(p8,p9,p10,img2,2);
+            tq(p11,p12,p13,img3,3);
+            tq(p14,p15,p16,img4,4);
+
+
+
+                },'json');
+
+
+
+
+                var box1=document.getElementById("box1");
+                var box2=document.getElementById("box2");
+                var box3=document.getElementById("box3");
+                var box31=document.getElementById("box31");
+                var box32=document.getElementById("box32");
+                var box33=document.getElementById("box33");
+                var box34=document.getElementById("box34");
+                var p1=document.getElementById("p1");
+                var p2=document.getElementById("p2");
+                var p3=document.getElementById("p3");
+                var p4=document.getElementById("p4");
+                var p5=document.getElementById("p5");
+                var p6=document.getElementById("p6");
+                var p7=document.getElementById("p7");
+                var p8=document.getElementById("p8");
+                var p9=document.getElementById("p9");
+                var p10=document.getElementById("p10");
+                var p11=document.getElementById("p11");
+                var p12=document.getElementById("p12");
+                var p13=document.getElementById("p13");
+                var p14=document.getElementById("p14");
+                var p15=document.getElementById("p15");
+                var p16=document.getElementById("p16");
+                var sp=document.getElementById("sp");
+
+                var img1=document.getElementById("img1");
+                var img2=document.getElementById("img2");
+                var img3=document.getElementById("img3");
+                var img4=document.getElementById("img4");
+
+
+                
+                //box1.style.background="rgba(0.5)";
+                //box1.style.opacity=0.1;
+                //box2.style.background="rgba(0,255,0,0.1)";
+
+                //获取当前时间
+                var myDate=new Date();
+                timer=myDate.getHours();
+                //alert(typeof timer);
+               // alert(timer); 
+              
+              //白天判断
+               if(timer>=6&&timer<19){
+                   timer=9;
+               }
+
+               
+                //根据时间切换box1背景图片
+                /*
+                  //if语句不能用
+                   if(6<=timer<19)
+                {
+                     box1.style.background="url(../img/23.jpg)";
+                }
+                else if(timer==19){
+                      box1.style.background="url(../img/24.jpg)";
+                }
+                */
+             
+
+                switch(timer)
+                {
+                    case 9: box1.style.background="url(img/23.jpg)";break;
+                    default: box1.style.background="url(img/24.jpg)"; box31.style.color="bisque";
+                    box32.style.color="bisque";box33.style.color="bisque";box34.style.color="bisque";
+
+                }
+               
+
+            }
+
+            //预加载第一次
+            var b="https://www.apiopen.top/weatherApi?city=武汉";
+            yjz(b);
+
+
+            //点击按钮进行执行程序
+            $("button").click(function(){
+
+            //对文本框中有无值进行判断，然后执行相应的代码
+            if($("#input1").val()=="")
+            {
+                alert("请输入你想了解天气的城市名称");
+            }else{
+                var url2="https://www.apiopen.top/weatherApi?city="+$("#input1").val();
+                var url=url2;
+                yjz(url);
+            };
+        });
+
+           //按回车键执行程序
+           $(document).keyup(function(e){
+               if(e.keyCode==13)
+               {
+
+                        if($("#input1").val()=="")
+                    {
+                        alert("请输入你想了解天气的城市名称");
+                    }else{
+                        var url2="https://www.apiopen.top/weatherApi?city="+$("#input1").val();
+                        var url=url2;
+                        yjz(url);
+                    };
+               }
+           });
+
+        
+          }
+       </script>
+
+
+
+
+   </head>
+   <body>
+      <div id="allmap"></div>
+      <div id="box1">
+            <label for="">
+                    城市:<input type="text" list="sex" id="input1" value=""/> 
+                    <datalist id="sex">
+                            <option>武汉</option>
+                            <option>上海</option>
+                            <option>北京</option>
+                            <option>深圳</option>
+                            <option>南京</option>
+                            <option>温州</option>
+                            <option>杭州</option>
+                    </datalist>
+            <button>获取天气</button>
+            </label>
+          <div id="box2">
+              <p id="p1" style="font-size:60px; height:80px;"></p>
+              <a id="p2" style="font-size:100px; height:120px;"></a><span id="sp" style="font-size:60px; height:80px;"></span>
+              <p id="p3" style="font-size:20px; font-weight:bold; height:40px;"></p>
+              <p id="p4" style="font-size:20px; font-weight:bold; height:40px;"></p>
+          </div>
+          <div id="box3">
+              <div id="box31">
+                    <p id="p5" style="font-size:30px; height:70px; margin-top:20px;"></p>
+                    <img id="img1" src="" style="height:70px;"/>
+                    <a id="p6" style="font-size:15px; height:70px; font-weight:bold; display:block;"></a>
+                    <p id="p7" style="font-size:30px; font-weight:bold; height:70px;"></p>
+
+              </div>
+              <div id="box32">
+
+                    <p id="p8" style="font-size:30px; height:70px; margin-top:20px;"></p>
+                    <img id="img2" src="" style="height:70px;"/>
+                    <a id="p9" style="font-size:15px; height:70px; font-weight:bold; display:block;"></a>
+                    <p id="p10" style="font-size:30px; font-weight:bold; height:70px;"></p>
+
+
+              </div>
+              <diV id="box33">
+                    <p id="p11" style="font-size:30px; height:70px; margin-top:20px;"></p>
+                    <img id="img3" src="" style="height:70px;"/>
+                    <a id="p12" style="font-size:15px; height:70px; font-weight:bold; display:block;"></a>
+                    <p id="p13" style="font-size:30px; font-weight:bold; height:70px;"></p>
+
+              </diV>
+              <div id="box34">
+                    <p id="p14" style="font-size:30px; height:70px; margin-top:20px;"></p>
+                    <img id="img4" src="" style="height:70px;"/>
+                    <a id="p15" style="font-size:15px; height:70px; font-weight:bold; display:block;"></a>
+                    <p id="p16" style="font-size:30px; font-weight:bold; height:70px;"></p>
+
+              </div>
+          </div>
+      </div>
+      <script>
+          	// 百度地图API功能
+            var cityName=null;
+            var map = new BMap.Map("allmap");
+            var point = new BMap.Point();
+            map.centerAndZoom(point,12);
+
+            function myFun(result){
+                var cityName = result.name;
+                map.setCenter(cityName);
+                //alert("当前定位城市:"+cityName);
+            }
+            var myCity = new BMap.LocalCity();
+            myCity.get(myFun);
+
+            //点击文档后，添加类名label
+            //var label= document.querySelector("label");
+           // document.onclick=function(){
+               //label.classList.add("label");
+            //}
+      </script>
+   </body>
+</html>
